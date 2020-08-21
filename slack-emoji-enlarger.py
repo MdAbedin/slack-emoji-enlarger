@@ -1,4 +1,10 @@
 import requests
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.parse_args()
+
+quit()
 
 url = 'https://{subdomain}.slack.com/api/emoji.add'
 
