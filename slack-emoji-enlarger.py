@@ -62,7 +62,9 @@ while Path("{path_except_suffix}-{tile_number}{file_type}".format(path_except_su
         }
         files = {"image": image_file}
 
+        res = requests.post(url, data=data, files=files, allow_redirects=False)
+        
         print(data)
-        #  req = requests.post(url, data=data, files=files, allow_redirects=False)
+        print(res.text)
 
     tile_number += 1
