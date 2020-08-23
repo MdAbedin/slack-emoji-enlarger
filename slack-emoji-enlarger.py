@@ -33,19 +33,27 @@ print(args.slack_user_token)
 
 Path(args.emoji_base_name).mkdir(exist_ok=True)
 
-SLACK_EMOJI_SIZE = 128
+SLACK_EMOJI_DIMENSION_SIZE = 128
+resized_path = "{directory}/{file_stem}{file_type}".format(directory=args.emoji_base_name, file_stem=args.emoji_base_name, file_type=Path(args.file_path).suffix)
 
 resize_cmd = "convert {file_path} -resize {resized_width}x{resized_height} {resized_path}".format(
         file_path=args.file_path,
-        resized_width=args.size*SLACK_EMOJI_SIZE if args.size_dimension == "width" else "",
-        resized_height=args.size*SLACK_EMOJI_SIZE if args.size_dimension == "height" else "",
-        resized_path="{directory}/{file_stem}{file_type}".format(directory=args.emoji_base_name, file_stem=args.emoji_base_name, file_type=Path(args.file_path).suffix)).split()
+        resized_width=args.size*SLACK_EMOJI_DIMENSION_SIZE if args.size_dimension == "width" else "",
+        resized_height=args.size*SLACK_EMOJI_DIMENSION_SIZE if args.size_dimension == "height" else "",
+        resized_path=resized_path
+        ).split()
 
-#  tile_cmd = "convert {file_path} -crop {slack_emoji_width}x{slack_emoji_height} +repage +adjoin {tile_path_base}"
+tile_cmd = "convert {file_path} -crop {slack_emoji_width}x{slack_emoji_height} +repage +adjoin {tile_path}".format(
+        file_path=resized_path,
+        slack_emoji_width=SLACK_EMOJI_DIMENSION_SIZE,
+        slack_emoji_height=SLACK_EMOJI_DIMENSION_SIZE,
+        tile_path=resized_path
+        ).split()
+
 print(" ".join(resize_cmd))
 subprocess.run(resize_cmd)
-#  print(' '.join(tile_cmd))
-#  subprocess.run(tile_cmd)
+print(" ".join(tile_cmd))
+subprocess.run(tile_cmd)
 quit()
 
 with open(args.file_path, "rb") as image_file:
