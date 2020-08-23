@@ -3,6 +3,7 @@ import argparse
 import sys
 import subprocess
 from pathlib import Path
+from math import ceil
 
 class MyParser(argparse.ArgumentParser):
     def error(self, message):
@@ -48,6 +49,17 @@ print(" ".join(tile_cmd))
 subprocess.run(tile_cmd)
 
 tile_number = 0
+paste_rows = []
+
+get_width_cmd = "identify -format %w {resized_path}".format(resized_path=resized_path).split()
+get_height_cmd = "identify -format %h {resized_path}".format(resized_path=resized_path).split()
+
+tiles_per_row = ceil(int(subprocess.run(get_width_cmd, capture_output=True).stdout)/SLACK_EMOJI_DIMENSION_SIZE)
+tiles_per_col = ceil(int(subprocess.run(get_height_cmd, capture_output=True).stdout)/SLACK_EMOJI_DIMENSION_SIZE)
+
+print(tiles_per_row)
+print(tiles_per_col)
+quit()
 
 while Path("{path_except_suffix}-{tile_number}{file_type}".format(path_except_suffix=resized_path.with_suffix(""), tile_number=tile_number, file_type=resized_path.suffix)).exists():
     tile_path = Path("{path_except_suffix}-{tile_number}{file_type}".format(path_except_suffix=resized_path.with_suffix(""), tile_number=tile_number, file_type=resized_path.suffix))
