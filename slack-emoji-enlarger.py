@@ -1,6 +1,7 @@
 import requests
 import argparse
 import sys
+import subprocess
 
 class MyParser(argparse.ArgumentParser):
     def error(self, message):
@@ -21,12 +22,20 @@ parser.add_argument("slack_user_token", help='a slack user token from the slack-
 args = parser.parse_args()
 
 """
-print(args.filename)
+print(args.file_path)
 print(args.size_dimension)
 print(args.size)
 print(args.slack_subdomain)
 print(args.slack_user_token)
 """
+
+resize_cmd ="convert {file_path} -resize {resized_width}x{resized_height} {resized_path}"
+tile_cmd = "convert {file_path} -crop {slack_emoji_width}x{slack_emoji_height} +repage +adjoin {tile_path_base}"
+print(' '.join(resize_cmd))
+subprocess.run(resize_cmd)
+print(' '.join(tile_cmd))
+subprocess.run(tile_cmd)
+quit()
 
 with open(args.file_path, 'rb') as image_file:
     url = "https://{subdomain}.slack.com/api/emoji.add".format(subdomain=args.slack_subdomain)
