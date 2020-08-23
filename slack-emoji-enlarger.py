@@ -2,10 +2,11 @@ import requests
 import argparse
 import sys
 import subprocess
+from pathlib import Path
 
 class MyParser(argparse.ArgumentParser):
     def error(self, message):
-        sys.stderr.write('error: %s\n\n' % message)
+        sys.stderr.write("error: %s\n\n" % message)
         print("help text:")
         self.print_help()
         sys.exit(2)
@@ -29,22 +30,32 @@ print(args.slack_subdomain)
 print(args.slack_user_token)
 """
 
-resize_cmd ="convert {file_path} -resize {resized_width}x{resized_height} {resized_path}"
-tile_cmd = "convert {file_path} -crop {slack_emoji_width}x{slack_emoji_height} +repage +adjoin {tile_path_base}"
-print(' '.join(resize_cmd))
+
+Path(args.emoji_base_name).mkdir(exist_ok=True)
+
+SLACK_EMOJI_SIZE = 128
+
+resize_cmd = "convert {file_path} -resize {resized_width}x{resized_height} {resized_path}".format(
+        file_path=args.file_path,
+        resized_width=args.size*SLACK_EMOJI_SIZE if args.size_dimension == "width" else "",
+        resized_height=args.size*SLACK_EMOJI_SIZE if args.size_dimension == "height" else "",
+        resized_path="{directory}/{file_stem}{file_type}".format(directory=args.emoji_base_name, file_stem=args.emoji_base_name, file_type=Path(args.file_path).suffix)).split()
+
+#  tile_cmd = "convert {file_path} -crop {slack_emoji_width}x{slack_emoji_height} +repage +adjoin {tile_path_base}"
+print(" ".join(resize_cmd))
 subprocess.run(resize_cmd)
-print(' '.join(tile_cmd))
-subprocess.run(tile_cmd)
+#  print(' '.join(tile_cmd))
+#  subprocess.run(tile_cmd)
 quit()
 
-with open(args.file_path, 'rb') as image_file:
+with open(args.file_path, "rb") as image_file:
     url = "https://{subdomain}.slack.com/api/emoji.add".format(subdomain=args.slack_subdomain)
     data = {
       "mode": "data",
       "name": args.emoji_base_name,
       "token": args.slack_user_token
     }
-    files = {'image': image_file}
+    files = {"image": image_file}
     
     res = requests.post(url, data=data, files=files, allow_redirects=False)
     print(res.text)
