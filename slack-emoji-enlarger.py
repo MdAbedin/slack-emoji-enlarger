@@ -48,35 +48,46 @@ subprocess.run(resize_cmd)
 print(" ".join(tile_cmd))
 subprocess.run(tile_cmd)
 
-tile_number = 0
-paste_rows = []
-
 get_width_cmd = "identify -format %w {resized_path}".format(resized_path=resized_path).split()
 get_height_cmd = "identify -format %h {resized_path}".format(resized_path=resized_path).split()
 
-tiles_per_row = ceil(int(subprocess.run(get_width_cmd, capture_output=True).stdout)/SLACK_EMOJI_DIMENSION_SIZE)
-tiles_per_col = ceil(int(subprocess.run(get_height_cmd, capture_output=True).stdout)/SLACK_EMOJI_DIMENSION_SIZE)
+num_rows = ceil(int(subprocess.run(get_height_cmd, capture_output=True).stdout)/SLACK_EMOJI_DIMENSION_SIZE)
+num_cols = ceil(int(subprocess.run(get_width_cmd, capture_output=True).stdout)/SLACK_EMOJI_DIMENSION_SIZE)
 
-print(tiles_per_row)
-print(tiles_per_col)
-quit()
+paste_rows = []
 
-while Path("{path_except_suffix}-{tile_number}{file_type}".format(path_except_suffix=resized_path.with_suffix(""), tile_number=tile_number, file_type=resized_path.suffix)).exists():
-    tile_path = Path("{path_except_suffix}-{tile_number}{file_type}".format(path_except_suffix=resized_path.with_suffix(""), tile_number=tile_number, file_type=resized_path.suffix))
-    print(tile_path)
+for row in range(num_rows):
+    paste_row = []
     
-    with open(str(tile_path), "rb") as image_file:
-        url = "https://{subdomain}.slack.com/api/emoji.add".format(subdomain=args.slack_subdomain)
-        data = {
-          "mode": "data",
-          "name": "{emoji_base_name}-{tile_number}".format(emoji_base_name=args.emoji_base_name, tile_number=tile_number),
-          "token": args.slack_user_token
-        }
-        files = {"image": image_file}
-
-        res = requests.post(url, data=data, files=files, allow_redirects=False)
+    for col in range(num_cols):
+        tile_number = row*num_cols + col
+        tile_path = Path("{path_except_suffix}-{tile_number}{file_type}".format(path_except_suffix=resized_path.with_suffix(""), tile_number=tile_number, file_type=resized_path.suffix))
+        emoji_name = "{emoji_base_name}-{tile_number}".format(emoji_base_name=args.emoji_base_name, tile_number=tile_number)
         
-        print(data)
-        print(res.text)
+        paste_row.append(":{emoji_name}:".format(emoji_name=emoji_name))
+        
+        print(tile_path)
+        print(emoji_name)
+    
+        with open(str(tile_path), "rb") as image_file:
+            url = "https://{subdomain}.slack.com/api/emoji.add".format(subdomain=args.slack_subdomain)
+            
+            data = {
+              "mode": "data",
+              "name": emoji_name,
+              "token": args.slack_user_token
+            }
+            files = {"image": image_file}
 
-    tile_number += 1
+            #  res = requests.post(url, data=data, files=files, allow_redirects=False)
+            
+            #  print(data)
+            #  print(res.text)
+
+    paste_rows.append("".join(paste_row))
+
+paste_string = "\n".join(paste_rows)
+slackbot_paste_string = "\\n".join(paste_rows)
+
+print(paste_string)
+print(slackbot_paste_string)
