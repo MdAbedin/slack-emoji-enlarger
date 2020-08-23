@@ -64,7 +64,7 @@ for row in range(num_rows):
     
     for col in range(num_cols):
         tile_number = row*num_cols + col
-        tile_path = Path("{path_except_suffix}-{tile_number}{file_type}".format(path_except_suffix=resized_path.with_suffix(""), tile_number=tile_number, file_type=file_type))
+        tile_path = Path("{path_except_suffix}-{tile_number:0{tile_number_width}}{file_type}".format(path_except_suffix=resized_path.with_suffix(""), tile_number=tile_number, tile_number_width=tile_number_width, file_type=file_type))
         emoji_name = "{emoji_base_name}-{tile_number:0{tile_number_width}}".format(emoji_base_name=args.emoji_base_name, tile_number=tile_number, tile_number_width=tile_number_width)
         
         paste_row.append(":{emoji_name}:".format(emoji_name=emoji_name))
@@ -72,8 +72,6 @@ for row in range(num_rows):
         print(tile_path)
         print(emoji_name)
 
-        continue
-    
         with open(str(tile_path), "rb") as image_file:
             url = "https://{subdomain}.slack.com/api/emoji.add".format(subdomain=args.slack_subdomain)
             
@@ -84,8 +82,8 @@ for row in range(num_rows):
             }
             files = {"image": image_file}
 
-            #  res = requests.post(url, data=data, files=files, allow_redirects=False)
-            #  print(res.text)
+            res = requests.post(url, data=data, files=files, allow_redirects=False)
+            print(res.text if "ok" in res.text else "")
 
     paste_rows.append("".join(paste_row))
 
