@@ -38,32 +38,40 @@ SLACK_EMOJI_DIMENSION_SIZE = 128
 resized_path = Path("{directory}/{file_stem}{file_type}".format(directory=args.emoji_base_name, file_stem=args.emoji_base_name, file_type=Path(args.file_path).suffix))
 file_type = resized_path.suffix
 
-resize_cmd = "convert {file_path} -resize {resized_width}x{resized_height} {resized_path}".format(
+resize_cmd_str = "convert {file_path} -resize {resized_width}x{resized_height} {resized_path}"
+if file_type == ".gif": resize_cmd_str = "gifsicle --colors 256 --resize {resized_width}x{resized_height} -o {resized_path} {file_path}"
+empty_size_char = ""
+if file_type == ".gif": empty_size_char = "_"
+
+resize_cmd = resize_cmd_str.format(
         file_path=args.file_path,
-        resized_width=args.size*SLACK_EMOJI_DIMENSION_SIZE if args.size_dimension == "width" else "",
-        resized_height=args.size*SLACK_EMOJI_DIMENSION_SIZE if args.size_dimension == "height" else "",
+        resized_width=args.size*SLACK_EMOJI_DIMENSION_SIZE if args.size_dimension == "width" else empty_size_char,
+        resized_height=args.size*SLACK_EMOJI_DIMENSION_SIZE if args.size_dimension == "height" else empty_size_char,
         resized_path=str(resized_path)
         ).split()
 
 print(" ".join(resize_cmd))
 subprocess.run(resize_cmd)
+quit()
 
 get_width_cmd = "identify -format %w {resized_path}".format(resized_path=resized_path).split()
 get_height_cmd = "identify -format %h {resized_path}".format(resized_path=resized_path).split()
 
-num_rows = ceil(int(subprocess.run(get_height_cmd, capture_output=True).stdout)/SLACK_EMOJI_DIMENSION_SIZE)
-num_cols = ceil(int(subprocess.run(get_width_cmd, capture_output=True).stdout)/SLACK_EMOJI_DIMENSION_SIZE)
+#  num_rows = ceil(int(subprocess.run(get_height_cmd, capture_output=True).stdout)/SLACK_EMOJI_DIMENSION_SIZE)
+num_rows = ceil(1280/SLACK_EMOJI_DIMENSION_SIZE)
+#  num_cols = ceil(int(subprocess.run(get_width_cmd, capture_output=True).stdout)/SLACK_EMOJI_DIMENSION_SIZE)
+num_cols = ceil(2272/SLACK_EMOJI_DIMENSION_SIZE)
 tile_number_width = len(str(num_rows*num_cols-1))
 
-tile_cmd = "convert {file_path} -crop {slack_emoji_width}x{slack_emoji_height} +repage +adjoin -background none -gravity northwest -extent 128x128 {tile_path}".format(
-        file_path=str(resized_path),
-        slack_emoji_width=SLACK_EMOJI_DIMENSION_SIZE,
-        slack_emoji_height=SLACK_EMOJI_DIMENSION_SIZE,
-        tile_path="{path_except_suffix}-%0{tile_number_width}d{file_type}".format(path_except_suffix=resized_path.with_suffix(""), tile_number_width=tile_number_width, file_type=file_type)
-        ).split()
-
-print(" ".join(tile_cmd))
-subprocess.run(tile_cmd)
+#  tile_cmd = "convert {file_path} -crop {slack_emoji_width}x{slack_emoji_height} +repage +adjoin -background none -gravity northwest -extent 128x128+{X}+{Y} {tile_path}".format(
+        #  file_path=str(resized_path),
+        #  slack_emoji_width=SLACK_EMOJI_DIMENSION_SIZE,
+        #  slack_emoji_height=SLACK_EMOJI_DIMENSION_SIZE,
+        #  tile_path="{path_except_suffix}-%0{tile_number_width}d{file_type}".format(path_except_suffix=resized_path.with_suffix(""), tile_number_width=tile_number_width, file_type=file_type)
+        #  ).split()
+#  
+#  print(" ".join(tile_cmd))
+#  subprocess.run(tile_cmd)
 
 paste_rows = []
 
@@ -79,6 +87,18 @@ for row in range(num_rows):
             tile_number_width=tile_number_width,
             file_type=file_type)
             )
+
+        tile_crop_cmd = "gifsicle -O3 --lossy=10 --crop {X},{Y}+{slack_emoji_width}x{slack_emoji_height} -o {tile_path} {resized_path}".format(
+                X=col*SLACK_EMOJI_DIMENSION_SIZE,
+                Y=row*SLACK_EMOJI_DIMENSION_SIZE,
+                slack_emoji_width=SLACK_EMOJI_DIMENSION_SIZE,
+                slack_emoji_height=SLACK_EMOJI_DIMENSION_SIZE,
+                tile_path=tile_path,
+                resized_path=resized_path
+                ).split()
+
+        print(" ".join(tile_crop_cmd))
+        subprocess.run(tile_crop_cmd)
         
         emoji_name = "{emoji_base_name}-{tile_number:0{tile_number_width}}".format(
                 emoji_base_name=args.emoji_base_name,
@@ -88,9 +108,6 @@ for row in range(num_rows):
         
         paste_row.append(":{emoji_name}:".format(emoji_name=emoji_name))
         
-        print(tile_path)
-        print(emoji_name)
-
         sleep(2)
         with open(str(tile_path), "rb") as image_file:
             url = "https://{subdomain}.slack.com/api/emoji.add".format(subdomain=args.slack_subdomain)
