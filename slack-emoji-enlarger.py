@@ -18,7 +18,7 @@ parser = MyParser(description="functionality: enlarge an image or gif and split 
 parser.add_argument("file_path", help="path to image or gif to enlarge and upload")
 parser.add_argument("size_dimension", help="whether to specify enlarged emoji's width or height", choices=["width", "height"])
 parser.add_argument("size", type=int, help="number of 128x128 emoji grid pieces either per column (vertical-size) or row (horizontal-size) in final output")
-parser.add_argument("emoji_base_name", help="base name of emojis to be uploaded. all emoji names will be of the form :{emoji_base_name}{X}: where X is the index of the emoji within the grid from left to right, top to bottom")
+parser.add_argument("emoji_base_name", help="base name of emojis to be uploaded. all emoji names will be of the form :{emoji_base_name}-{X}: where X is the index of the emoji within the grid from left to right, top to bottom, with leading zeros so that all corresponding emoji names are the same width")
 parser.add_argument("slack_subdomain", help="the subdomain of the slack workspace where you want to upload the emojis: {slack-subdomain}.slack.com")
 parser.add_argument("slack_user_token", help='a slack user token from the slack-subdomain. usually starts with "xox"')
 
@@ -71,9 +71,8 @@ for row in range(num_rows):
     paste_row = []
     
     for col in range(num_cols):
-        sleep(1)
-        
         tile_number = row*num_cols + col
+        
         tile_path = Path("{path_except_suffix}-{tile_number:0{tile_number_width}}{file_type}".format(
             path_except_suffix=resized_path.with_suffix(""),
             tile_number=tile_number,
@@ -92,6 +91,7 @@ for row in range(num_rows):
         print(tile_path)
         print(emoji_name)
 
+        sleep(2)
         with open(str(tile_path), "rb") as image_file:
             url = "https://{subdomain}.slack.com/api/emoji.add".format(subdomain=args.slack_subdomain)
             
@@ -103,7 +103,7 @@ for row in range(num_rows):
             files = {"image": image_file}
 
             res = requests.post(url, data=data, files=files, allow_redirects=False)
-            print(res.text if "ok" in res.text else "")
+            print(res.text)
 
     paste_rows.append("".join(paste_row))
 
