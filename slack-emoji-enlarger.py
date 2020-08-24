@@ -47,7 +47,7 @@ num_rows = ceil(int(subprocess.run(get_height_cmd, capture_output=True).stdout)/
 num_cols = ceil(int(subprocess.run(get_width_cmd, capture_output=True).stdout)/SLACK_EMOJI_DIMENSION_SIZE)
 tile_number_width = len(str(num_rows*num_cols-1))
 
-tile_cmd = "convert {file_path} -crop {slack_emoji_width}x{slack_emoji_height} +repage +adjoin {tile_path}".format(
+tile_cmd = "convert {file_path} -crop {slack_emoji_width}x{slack_emoji_height} +repage +adjoin -background none -gravity northwest -extent 128x128 {tile_path}".format(
         file_path=str(resized_path),
         slack_emoji_width=SLACK_EMOJI_DIMENSION_SIZE,
         slack_emoji_height=SLACK_EMOJI_DIMENSION_SIZE,
