@@ -4,6 +4,7 @@ import sys
 import subprocess
 from pathlib import Path
 from math import ceil
+from time import sleep
 
 class MyParser(argparse.ArgumentParser):
     def error(self, message):
@@ -70,6 +71,8 @@ for row in range(num_rows):
     paste_row = []
     
     for col in range(num_cols):
+        sleep(1)
+        
         tile_number = row*num_cols + col
         tile_path = Path("{path_except_suffix}-{tile_number:0{tile_number_width}}{file_type}".format(
             path_except_suffix=resized_path.with_suffix(""),
@@ -99,8 +102,8 @@ for row in range(num_rows):
             }
             files = {"image": image_file}
 
-            #  res = requests.post(url, data=data, files=files, allow_redirects=False)
-            #  print(res.text if "ok" in res.text else "")
+            res = requests.post(url, data=data, files=files, allow_redirects=False)
+            print(res.text if "ok" in res.text else "")
 
     paste_rows.append("".join(paste_row))
 
