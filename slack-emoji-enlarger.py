@@ -52,26 +52,18 @@ resize_cmd = resize_cmd_str.format(
 
 print(" ".join(resize_cmd))
 subprocess.run(resize_cmd)
-quit()
 
-get_width_cmd = "identify -format %w {resized_path}".format(resized_path=resized_path).split()
-get_height_cmd = "identify -format %h {resized_path}".format(resized_path=resized_path).split()
+get_sizes_cmd = "identify -format %wx%h {resized_path}".format(resized_path=resized_path).split()
+if file_type == ".gif": get_sizes_cmd = "gifsicle --sinfo {resized_path}".format(resized_path=resized_path).split()
 
-#  num_rows = ceil(int(subprocess.run(get_height_cmd, capture_output=True).stdout)/SLACK_EMOJI_DIMENSION_SIZE)
-num_rows = ceil(1280/SLACK_EMOJI_DIMENSION_SIZE)
-#  num_cols = ceil(int(subprocess.run(get_width_cmd, capture_output=True).stdout)/SLACK_EMOJI_DIMENSION_SIZE)
-num_cols = ceil(2272/SLACK_EMOJI_DIMENSION_SIZE)
+sizes = subprocess.run(get_sizes_cmd, capture_output=True).stdout.decode("utf-8")
+if file_type == ".gif": sizes = sizes.split("\n")[1].split()[-1]
+
+width, height = (int(size) for size in sizes.split("x"))
+
+num_rows = ceil(height/SLACK_EMOJI_DIMENSION_SIZE)
+num_cols = ceil(width/SLACK_EMOJI_DIMENSION_SIZE)
 tile_number_width = len(str(num_rows*num_cols-1))
-
-#  tile_cmd = "convert {file_path} -crop {slack_emoji_width}x{slack_emoji_height} +repage +adjoin -background none -gravity northwest -extent 128x128+{X}+{Y} {tile_path}".format(
-        #  file_path=str(resized_path),
-        #  slack_emoji_width=SLACK_EMOJI_DIMENSION_SIZE,
-        #  slack_emoji_height=SLACK_EMOJI_DIMENSION_SIZE,
-        #  tile_path="{path_except_suffix}-%0{tile_number_width}d{file_type}".format(path_except_suffix=resized_path.with_suffix(""), tile_number_width=tile_number_width, file_type=file_type)
-        #  ).split()
-#  
-#  print(" ".join(tile_cmd))
-#  subprocess.run(tile_cmd)
 
 paste_rows = []
 
@@ -88,14 +80,24 @@ for row in range(num_rows):
             file_type=file_type)
             )
 
-        tile_crop_cmd = "gifsicle -O3 --lossy=10 --crop {X},{Y}+{slack_emoji_width}x{slack_emoji_height} -o {tile_path} {resized_path}".format(
-                X=col*SLACK_EMOJI_DIMENSION_SIZE,
-                Y=row*SLACK_EMOJI_DIMENSION_SIZE,
+        tile_crop_cmd = "convert {resized_path} -crop {slack_emoji_width}x{slack_emoji_height}+{X}+{Y} -background none -gravity northwest -extent 128x128 {tile_path}".format(
+                resized_path=resized_path,
                 slack_emoji_width=SLACK_EMOJI_DIMENSION_SIZE,
                 slack_emoji_height=SLACK_EMOJI_DIMENSION_SIZE,
-                tile_path=tile_path,
-                resized_path=resized_path
+                X=col*SLACK_EMOJI_DIMENSION_SIZE,
+                Y=row*SLACK_EMOJI_DIMENSION_SIZE,
+                tile_path=tile_path
                 ).split()
+        
+        if file_type == ".gif":
+            tile_crop_cmd = "gifsicle -O3 --lossy=10 --crop {X},{Y}+{slack_emoji_width}x{slack_emoji_height} -o {tile_path} {resized_path}".format(
+                    X=col*SLACK_EMOJI_DIMENSION_SIZE,
+                    Y=row*SLACK_EMOJI_DIMENSION_SIZE,
+                    slack_emoji_width=SLACK_EMOJI_DIMENSION_SIZE,
+                    slack_emoji_height=SLACK_EMOJI_DIMENSION_SIZE,
+                    tile_path=tile_path,
+                    resized_path=resized_path
+                    ).split()
 
         print(" ".join(tile_crop_cmd))
         subprocess.run(tile_crop_cmd)
