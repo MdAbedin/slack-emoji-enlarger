@@ -20,7 +20,8 @@ parser.add_argument("size_dimension", help="which dimension the enlarged size wi
 parser.add_argument("size", type=int, help="number of 128x128 emoji grid pieces either per column (height) or row (width-size) in final output")
 parser.add_argument("emoji_base_name", help="base name of emojis to be uploaded. all emoji names will be of the form :{emoji_base_name}-{X}: where X is the index of the emoji within the grid from left to right, top to bottom, with leading zeros so that all corresponding emoji names are the same width")
 parser.add_argument("slack_subdomain", help="the subdomain of the slack workspace where you want to upload the emojis: {slack-subdomain}.slack.com")
-parser.add_argument("slack_user_token", help='a slack user token from the slack-subdomain. usually starts with "xox"')
+parser.add_argument("slack_user_token", help="a slack user token from the slack-subdomain. usually starts with 'xox'")
+parser.add_argument("-d", "--dry_run", help="enlarge and create tiles but don't upload", action="store_true")
 
 args = parser.parse_args()
 
@@ -110,20 +111,21 @@ for row in range(num_rows):
         
         paste_row.append(":{emoji_name}:".format(emoji_name=emoji_name))
         
-        sleep(2)
-        
-        with open(str(tile_path), "rb") as image_file:
-            url = "https://{subdomain}.slack.com/api/emoji.add".format(subdomain=args.slack_subdomain)
+        if not args.dry_run:
+            sleep(2)
             
-            data = {
-              "mode": "data",
-              "name": emoji_name,
-              "token": args.slack_user_token
-            }
-            files = {"image": image_file}
+            with open(str(tile_path), "rb") as image_file:
+                url = "https://{subdomain}.slack.com/api/emoji.add".format(subdomain=args.slack_subdomain)
+                
+                data = {
+                  "mode": "data",
+                  "name": emoji_name,
+                  "token": args.slack_user_token
+                }
+                files = {"image": image_file}
 
-            res = requests.post(url, data=data, files=files, allow_redirects=False)
-            print(res.text)
+                res = requests.post(url, data=data, files=files, allow_redirects=False)
+                print(res.text)
 
     paste_rows.append("".join(paste_row))
 
