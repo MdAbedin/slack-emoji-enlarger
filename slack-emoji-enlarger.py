@@ -132,8 +132,20 @@ for row in range(num_rows):
 user_paste_string = "\n".join(paste_rows)
 slackbot_paste_string = "\\n".join(paste_rows)
 
-print("USER PASTE STRING:")
-print(user_paste_string)
-print()
-print("SLACKBOT PASTE STRING:")
-print(slackbot_paste_string)
+user_paste_path = "{directory}/user_paste.txt".format(directory=resized_path.parent)
+slackbot_paste_path = "{directory}/slackbot_paste.txt".format(directory=resized_path.parent)
+
+with open(user_paste_path, "w") as user_paste_file:
+    user_paste_file.write(user_paste_string)
+
+with open(slackbot_paste_path, "w") as slackbot_paste_file:
+    slackbot_paste_file.write(slackbot_paste_string)
+    
+print("\n================================================================================")
+print("USER PASTE STRING (also in {user_paste_path}):".format(user_paste_path=user_paste_path), end="\n\n")
+print(user_paste_string, end="\n\n")
+
+print("================================================================================")
+print("SLACKBOT PASTE STRING (also in {slackbot_paste_path}):".format(slackbot_paste_path=slackbot_paste_path), end="\n\n")
+print(slackbot_paste_string, end="\n\n")
+print("================================================================================")
