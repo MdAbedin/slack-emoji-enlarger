@@ -2,9 +2,11 @@
 
 A command-line tool to split an image or gif into tiles and upload each as a slack emoji to create the illusion of an enlarged slack emoji
 
-![example of enlarged slack emojis](https://user-images.githubusercontent.com/18149939/91142815-77996c80-e67f-11ea-87ec-08996111848a.png)
+![example of enlarged slack emoji image](https://user-images.githubusercontent.com/18149939/91142815-77996c80-e67f-11ea-87ec-08996111848a.png)
 
-![enlarged emoji wtih spacing between individual emojis](https://user-images.githubusercontent.com/18149939/91142862-8f70f080-e67f-11ea-9fcd-7a24ee56aa3d.png)
+![enlarged emoji image wtih spacing between individual emojis](https://user-images.githubusercontent.com/18149939/91142862-8f70f080-e67f-11ea-9fcd-7a24ee56aa3d.png)
+
+![exmaple of enlarged slack emoji gif](https://user-images.githubusercontent.com/18149939/91186739-640cf680-e6bd-11ea-8b67-1414417bdc85.gif)
 
 ## Dependencies
 
