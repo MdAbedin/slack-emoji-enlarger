@@ -33,6 +33,6 @@ Optional arguments:
   - `python3 slack-emoji-enlarger.py stonks.jpg height 3 stonks-big coinbase xoxs-123456789`
 
 ## Notes
-- You might have to soft refresh (`Ctrl + R` or `Cmd + R`) in order for gif tiles to sync
+- You might have to soft refresh (`Ctrl + R` or `Cmd + R`) Slack in order for gif tiles to sync
 - Large or rapid usages might run into rate limiting from Slack
 - Large gif enlargements may cause lag or crashes in Slack
