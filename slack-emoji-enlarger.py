@@ -33,8 +33,6 @@ if Path(args.file_path).suffix in [".jpg", ".jpeg"]:
     
 Path(args.emoji_base_name).mkdir(exist_ok=True)
 
-SLACK_EMOJI_DIMENSION_SIZE = 128
-
 resized_path = Path("{directory}/{file_stem}{file_type}".format(directory=args.emoji_base_name, file_stem=args.emoji_base_name, file_type=Path(args.file_path).suffix))
 file_type = resized_path.suffix
 
@@ -42,6 +40,8 @@ resize_cmd_str = "convert {file_path} -resize {resized_width}x{resized_height} {
 if file_type == ".gif": resize_cmd_str = "gifsicle --colors 256 --resize {resized_width}x{resized_height} -o {resized_path} {file_path}"
 empty_size_char = ""
 if file_type == ".gif": empty_size_char = "_"
+
+SLACK_EMOJI_DIMENSION_SIZE = 128
 
 resize_cmd = resize_cmd_str.format(
         file_path=args.file_path,
@@ -111,6 +111,7 @@ for row in range(num_rows):
         paste_row.append(":{emoji_name}:".format(emoji_name=emoji_name))
         
         sleep(2)
+        
         with open(str(tile_path), "rb") as image_file:
             url = "https://{subdomain}.slack.com/api/emoji.add".format(subdomain=args.slack_subdomain)
             
@@ -126,9 +127,11 @@ for row in range(num_rows):
 
     paste_rows.append("".join(paste_row))
 
-paste_string = "\n".join(paste_rows)
+user_paste_string = "\n".join(paste_rows)
 slackbot_paste_string = "\\n".join(paste_rows)
 
-print(paste_string)
+print("USER PASTE STRING:")
+print(user_paste_string)
 print()
+print("SLACKBOT PASTE STRING:")
 print(slackbot_paste_string)
