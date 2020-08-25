@@ -1,6 +1,6 @@
 # slack-emoji-enlarger
 
-A command-line tool to split an image or gif into tiles and upload each as a slack emoji to create the illusion of an enlarged slack emoji
+A command-line tool to enlarge and split an image or gif into tiles and auto-upload each as a slack emoji to create the illusion of an enlarged slack emoji
 
 ![example of enlarged slack emoji image](https://user-images.githubusercontent.com/18149939/91142815-77996c80-e67f-11ea-87ec-08996111848a.png)
 
