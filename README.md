@@ -36,5 +36,6 @@ Optional arguments:
 
 ## Notes
 - You might have to soft refresh (`Ctrl + R` or `Cmd + R`) Slack in order for gif tiles to sync
-- Large or rapid usages might run into rate limiting from Slack
+- Large or rapid usages might run into rate limiting from Slack. You can re-run your command after waiting for a bit in order to retry all uploads
 - Large gif enlargements may cause lag or crashes in Slack
+- Some gifs may be too large in file size even after the lossy compression from this tool. You can try increasing GIF_COMPRESSION and re-running your command to retry all uploads with increased compression
