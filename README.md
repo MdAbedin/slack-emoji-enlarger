@@ -8,6 +8,10 @@ A command-line tool to split an image or gif into tiles and upload each as a sla
 
 ## Dependencies
 
+- [Python3](https://www.python.org/downloads/)
+- If you're using images, [ImageMagick](https://imagemagick.org/script/download.php)
+- If you're using gifs, [gifsicle](https://www.lcdf.org/gifsicle/)
+
 ## How to Use
 
 ## Notes
