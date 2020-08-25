@@ -39,3 +39,11 @@ Optional arguments:
 - Large or rapid usages might run into rate limiting from Slack. You can re-run your command after waiting for a bit in order to retry all uploads
 - Large gif enlargements may cause lag or crashes in Slack
 - Some gifs may be too large in file size even after the lossy compression from this tool. You can try increasing GIF_COMPRESSION and re-running your command to retry all uploads with increased compression
+
+## Planned Features
+- Auto-retry uploads that fail due to rate limiting
+- Provide a GUI alongside the CLI for easier use and to easily preview the results before uploading
+- Option to use email and password instead of Slack token
+- Option to show details and ask for confirmation before starting the process
+- Option to delete exisiting emojis with the same name before uploading
+- Option to delete all emoji tiles from a previous upload
