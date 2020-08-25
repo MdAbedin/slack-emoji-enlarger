@@ -28,7 +28,7 @@ Required arguments:
 Optional arguments:
 - `-h` or `--help`: show help message and exit
 - `-d` or `--dry_run`: enlarge and create tiles but don't upload
-- `-gc GIF_COMPRESSION` or `--gif_compression GIF_COMPRESSION`: amount of lossy gif compression to apply before uploading. default is 20 and higher means more compression
+- `-gc GIF_COMPRESSION` or `--gif_compression GIF_COMPRESSION`: amount of lossy gif compression to apply before uploading. default is 30 which is very light compression. 200 is heavy compression
 
 
 ## Usage Examples
@@ -42,7 +42,7 @@ Optional arguments:
 - You might have to soft refresh (`Ctrl + R` or `Cmd + R`) Slack in order for gif tiles to sync
 - Large or rapid usages might run into rate limiting from Slack. You can re-run your command after waiting for a bit in order to retry all uploads
 - Large gif enlargements may cause lag or crashes in Slack
-- Some gifs may be too large in file size even after the lossy compression from this tool. You can try increasing GIF_COMPRESSION and re-running your command to retry all uploads with increased compression
+- Some gifs may be too large in file size even after the lossy compression from this tool. You can try increasing the gif compression by retrying with `--gif_compression X`, where `X` is a number bigger than 30, at the end of your command to retry all uploads with increased compression. 200 is heavy compression
 
 ## Planned Features
 - Auto-retry uploads that fail due to rate limiting
