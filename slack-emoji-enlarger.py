@@ -90,7 +90,7 @@ for row in range(num_rows):
                 ).split()
         
         if file_type == ".gif":
-            tile_crop_cmd = "gifsicle -O3 --lossy=10 --crop {X},{Y}+{slack_emoji_width}x{slack_emoji_height} -o {tile_path} {resized_path}".format(
+            tile_crop_cmd = "gifsicle -O3 --lossy=20 --crop {X},{Y}+{slack_emoji_width}x{slack_emoji_height} -o {tile_path} {resized_path}".format(
                     X=col*SLACK_EMOJI_DIMENSION_SIZE,
                     Y=row*SLACK_EMOJI_DIMENSION_SIZE,
                     slack_emoji_width=SLACK_EMOJI_DIMENSION_SIZE,
