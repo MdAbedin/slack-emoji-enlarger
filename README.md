@@ -33,8 +33,11 @@ Optional arguments:
 
 ## Usage Examples
 
-- Enlarge an image `stonks.jpg` to have a height of 3 emojis where each emoji's name is `:stonks-big-00:`, `:stonks-big-01:`, etc. to the Slack workspace `coinbase.slack.com` using your Slack user token `xoxs-123456789`:
-  - `python3 slack-emoji-enlarger.py stonks.jpg height 3 stonks-big coinbase xoxs-123456789`
+- Enlarge an image `stonks.jpg` to have a height of 3 emojis where each emoji's name is `:stonks-big-00:`, `:stonks-big-01:`, etc. to the Slack workspace `coinbase.slack.com` using your Slack user token `xoxs-1234-1234-1234-abcd`:
+  - `python3 slack-emoji-enlarger.py stonks.jpg height 3 stonks-big coinbase xoxs-1234-1234-1234-abcd`
+
+- Enlarge a gif `eyes-shaking.gif` to have a width of 10 emojis where each emoji's name is `:eyes-shaking-w10-000:`, `:eyes-shaking-w10-001:`, etc. to the slack workspace `hacknyu.slack.com` using your Slack user token `xoxs-1234-1234-1234-abcd`, with each gif tile being lossy compressed with a factor of 100:
+  - `python3 slack-emoji-enlarger.py eyes-shaking.gif width 10 eyes-shaking-w10 hacknyu xoxs-1234-1234-1234-abcd --gif_compression 100`
 
 ## Notes
 - **DO NOT SHARE OR MAKE YOUR SLACK TOKEN PUBLICALLY FINDABLE**, for example don't message someone with a command copy paste that has your token in it or upload it to a public github repo. It can be used to authenticate for many Slack API endpoints, so if someone other than you has your token, they could cause a lot of problems in your Slack workspace
