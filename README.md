@@ -23,7 +23,7 @@ Required arguments:
 - `size`: number of 128x128 emoji tiles either per column (height) or row (width) in final output
 - `emoji_base_name`: base name of emojis to be uploaded. all emoji names will be of the form `:{emoji_base_name}-{X}:` where `X` is the index of the emoji within the grid from left to right, top to bottom, with leading zeros so that all corresponding emoji names are the same width
 - `slack_subdomain`: the subdomain of the slack workspace where you want to upload the emojis: {`slack-subdomain`}.slack.com
-- `slack_user_token`:  a slack user token from the slack-subdomain. get it by going to `{slack-subomain}.slack.com/customize/emoji` -> open console -> run `window.prompt("slack user token:", TS.boot_data.api_token)`. usually starts with "xox"
+- `slack_user_token`:  a slack user token from the slack-subdomain. get it by going to `{slack-subomain}.slack.com/customize/emoji` -> open console -> run `window.prompt("slack user token:", TS.boot_data.api_token)`. usually starts with 'xox'
 
 Optional arguments:
 - `-h` or `--help`: show help message and exit
@@ -35,7 +35,7 @@ Optional arguments:
   - `python3 slack-emoji-enlarger.py stonks.jpg height 3 stonks-big coinbase xoxs-123456789`
 
 ## Notes
-- **DO NOT SHARE OR MAKE YOUR SLACK TOKEN PUBLICALLY FINDABLE**, for example don't message someone with a command copy paste that has your token in it or upload it to a public github repo. It can be used to authenticate for many Slack API endpoints, so if someone other than you has your token, they could cause a lot of problems in your Slack workspace\
+- **DO NOT SHARE OR MAKE YOUR SLACK TOKEN PUBLICALLY FINDABLE**, for example don't message someone with a command copy paste that has your token in it or upload it to a public github repo. It can be used to authenticate for many Slack API endpoints, so if someone other than you has your token, they could cause a lot of problems in your Slack workspace
 - Slack tokens might expire at random times, so if uploads fail constantly, try getting a Slack token again
 - You might have to soft refresh (`Ctrl + R` or `Cmd + R`) Slack in order for gif tiles to sync
 - Large or rapid usages might run into rate limiting from Slack. You can re-run your command after waiting for a bit in order to retry all uploads
