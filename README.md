@@ -13,7 +13,7 @@ A command-line tool to split an image or gif into tiles and upload each as a sla
 - If you're using gifs, [gifsicle](https://www.lcdf.org/gifsicle/)
 
 ## Usage
-`slack-emoji-enlarger.py [-h] file_path size_dimension size emoji_base_name slack_subdomain slack_user_token`
+`python3 slack-emoji-enlarger.py file_path size_dimension size emoji_base_name slack_subdomain slack_user_token`
 
 Required arguments:
 - `file_path`: path to image or gif to enlarge and upload
