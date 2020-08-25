@@ -25,5 +25,6 @@ Required arguments:
 
 Optional arguments:
 - `-h, --help`: show help message and exit
+- `-d, --dry_run`: enlarge and create tiles but don't upload
 
 ## Notes
