@@ -24,8 +24,8 @@ Required arguments:
 - `slack_user_token`:  a slack user token from the slack-subdomain. usually starts with "xox"
 
 Optional arguments:
-- `-h, --help`: show help message and exit
-- `-d, --dry_run`: enlarge and create tiles but don't upload
+- `-h` or `--help`: show help message and exit
+- `-d` or `--dry_run`: enlarge and create tiles but don't upload
 
 ## Usage Examples
 
