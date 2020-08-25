@@ -20,7 +20,7 @@ parser.add_argument("size_dimension", help="which dimension the enlarged size wi
 parser.add_argument("size", type=int, help="number of 128x128 emoji grid pieces either per column (height) or row (width-size) in final output")
 parser.add_argument("emoji_base_name", help="base name of emojis to be uploaded. all emoji names will be of the form :{emoji_base_name}-{X}: where X is the index of the emoji within the grid from left to right, top to bottom, with leading zeros so that all corresponding emoji names are the same width")
 parser.add_argument("slack_subdomain", help="the subdomain of the slack workspace where you want to upload the emojis: {slack-subdomain}.slack.com")
-parser.add_argument("slack_user_token", help="a slack user token from the slack-subdomain. usually starts with 'xox'")
+parser.add_argument("slack_user_token", help="a slack user token for authenticating API calls. get it by going to '{slack-subomain}.slack.com/customize/emoji' -> open console -> run 'window.prompt('slack user token:', TS.boot_data.api_token)'. usually starts with 'xox'")
 parser.add_argument("-d", "--dry_run", help="enlarge and create tiles but don't upload", action="store_true")
 
 args = parser.parse_args()
