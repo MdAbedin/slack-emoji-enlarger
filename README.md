@@ -54,6 +54,7 @@ Optional arguments:
 - Auto-retry uploads that fail due to rate limiting
 - Provide a GUI alongside the CLI for easier use and to easily preview the results before uploading
 - Option to use email and password instead of Slack token
+- Option to specify upload interval in command
 - Option to show details and ask for confirmation before starting the process
 - Option to delete exisiting emojis with the same name before uploading
 - Option to delete all emoji tiles from a previous upload
