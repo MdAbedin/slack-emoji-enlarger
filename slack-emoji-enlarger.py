@@ -111,10 +111,10 @@ for row in range(num_rows):
         
         paste_row.append(":{emoji_name}:".format(emoji_name=emoji_name))
         
-        UPLOAD_INTERVAL = 2
+        UPLOAD_INTERVAL_SECONDS = 2
         
         if not args.dry_run:
-            sleep(UPLOAD_INTERVAL)
+            sleep(UPLOAD_INTERVAL_SECONDS)
             
             with open(str(tile_path), "rb") as image_file:
                 url = "https://{subdomain}.slack.com/api/emoji.add".format(subdomain=args.slack_subdomain)
