@@ -28,3 +28,6 @@ Optional arguments:
 - `-d, --dry_run`: enlarge and create tiles but don't upload
 
 ## Notes
+- You might have to soft refresh (`Ctrl + R` or `Cmd + R`) in order for gif tiles to sync
+- Large or rapid usages might run into rate limiting from Slack
+- Large gif enlargements may cause lag or crashes in Slack
