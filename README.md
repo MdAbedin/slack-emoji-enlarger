@@ -27,6 +27,11 @@ Optional arguments:
 - `-h, --help`: show help message and exit
 - `-d, --dry_run`: enlarge and create tiles but don't upload
 
+## Usage Examples
+
+- Enlarge an image `stonks.jpg` to have a height of 3 emojis where each emoji's name is `:stonks-big-00:`, `:stonks-big-01:`, etc. to the Slack workspace `coinbase.slack.com` using your Slack user token `xoxs-123456789`:
+  - `python3 slack-emoji-enlarger.py stonks.jpg height 3 stonks-big coinbase xoxs-123456789`
+
 ## Notes
 - You might have to soft refresh (`Ctrl + R` or `Cmd + R`) in order for gif tiles to sync
 - Large or rapid usages might run into rate limiting from Slack
