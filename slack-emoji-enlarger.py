@@ -111,8 +111,10 @@ for row in range(num_rows):
         
         paste_row.append(":{emoji_name}:".format(emoji_name=emoji_name))
         
+        UPLOAD_INTERVAL = 2
+        
         if not args.dry_run:
-            sleep(2)
+            sleep(UPLOAD_INTERVAL)
             
             with open(str(tile_path), "rb") as image_file:
                 url = "https://{subdomain}.slack.com/api/emoji.add".format(subdomain=args.slack_subdomain)
@@ -141,11 +143,14 @@ with open(user_paste_path, "w") as user_paste_file:
 with open(slackbot_paste_path, "w") as slackbot_paste_file:
     slackbot_paste_file.write(slackbot_paste_string)
     
-print("\n================================================================================")
+print("\n================================================================================", end="\n\n")
+
 print("USER PASTE STRING (also in {user_paste_path}):".format(user_paste_path=user_paste_path), end="\n\n")
 print(user_paste_string, end="\n\n")
 
-print("================================================================================")
+print("================================================================================", end="\n\n")
+
 print("SLACKBOT PASTE STRING (also in {slackbot_paste_path}):".format(slackbot_paste_path=slackbot_paste_path), end="\n\n")
 print(slackbot_paste_string, end="\n\n")
+
 print("================================================================================")
