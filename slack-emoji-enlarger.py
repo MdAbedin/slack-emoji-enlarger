@@ -16,8 +16,8 @@ class MyParser(argparse.ArgumentParser):
 parser = MyParser(description="functionality: enlarge an image or gif and split into a grid and upload each grid piece as a slack emoji in order to create the look of an enlarged slack emoji")
 
 parser.add_argument("file_path", help="path to image or gif to enlarge and upload")
-parser.add_argument("size_dimension", help="whether to specify enlarged emoji's width or height", choices=["width", "height"])
-parser.add_argument("size", type=int, help="number of 128x128 emoji grid pieces either per column (vertical-size) or row (horizontal-size) in final output")
+parser.add_argument("size_dimension", help="which dimension the enlarged size will be given in, either 'width' or 'height'", choices=["width", "height"])
+parser.add_argument("size", type=int, help="number of 128x128 emoji grid pieces either per column (height) or row (width-size) in final output")
 parser.add_argument("emoji_base_name", help="base name of emojis to be uploaded. all emoji names will be of the form :{emoji_base_name}-{X}: where X is the index of the emoji within the grid from left to right, top to bottom, with leading zeros so that all corresponding emoji names are the same width")
 parser.add_argument("slack_subdomain", help="the subdomain of the slack workspace where you want to upload the emojis: {slack-subdomain}.slack.com")
 parser.add_argument("slack_user_token", help='a slack user token from the slack-subdomain. usually starts with "xox"')
