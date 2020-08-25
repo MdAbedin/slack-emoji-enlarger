@@ -28,6 +28,8 @@ Required arguments:
 Optional arguments:
 - `-h` or `--help`: show help message and exit
 - `-d` or `--dry_run`: enlarge and create tiles but don't upload
+- `-gc GIF_COMPRESSION` or `--gif_compression GIF_COMPRESSION`: amount of lossy gif compression to apply before uploading. default is 20 and higher means more compression
+
 
 ## Usage Examples
 
