@@ -22,7 +22,7 @@ parser.add_argument("emoji_base_name", help="base name of emojis to be uploaded.
 parser.add_argument("slack_subdomain", help="the subdomain of the slack workspace where you want to upload the emojis: {slack-subdomain}.slack.com")
 parser.add_argument("slack_user_token", help="a slack user token for authenticating API calls. get it by going to '{slack-subomain}.slack.com/customize/emoji' -> open console -> run 'window.prompt('slack user token:', TS.boot_data.api_token)'. usually starts with 'xox'")
 parser.add_argument("-d", "--dry_run", help="enlarge and create tiles but don't upload", action="store_true")
-parser.add_argument("-gc", "--gif_compression", type=int, help="amount of lossy gif compression to apply before uploading. default is 20 and higher means more compression")
+parser.add_argument("-gc", "--gif_compression", type=int, help="amount of lossy gif compression to apply before uploading. default is 30 which is very light compression. 200 is heavy compression")
 
 args = parser.parse_args()
 
@@ -91,7 +91,8 @@ for row in range(num_rows):
                 tile_path=tile_path
                 ).split()
         
-        GIF_COMPRESSION = args.gif_compression if args.gif_compression else 20
+        DEFAULT_GIF_COMPRESSION = 30
+        GIF_COMPRESSION = args.gif_compression if args.gif_compression else DEFAULT_GIF_COMPRESSION
         
         if file_type == ".gif":
             tile_crop_cmd = "gifsicle -O3 --lossy={GIF_COMPRESSION} --crop {X},{Y}+{slack_emoji_width}x{slack_emoji_height} -o {tile_path} {resized_path}".format(
